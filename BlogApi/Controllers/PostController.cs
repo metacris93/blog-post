@@ -21,7 +21,7 @@ namespace BlogApi.Controllers
             _postRepository = postRepository;
         }
         [HttpGet]
-        [Route("GetPosts")]
+        [Route("")]
         public async Task<JsonResult> GetPosts()
         {
             try
@@ -46,8 +46,8 @@ namespace BlogApi.Controllers
                 };
             }
         }
-        [HttpGet("{id}")]
-        [Route("GetPost")]
+        [HttpGet]
+        [Route("/{id}")]
         public async Task<JsonResult> GetPost(int? id)
         {
             if (id == null)
@@ -82,7 +82,7 @@ namespace BlogApi.Controllers
             }
         }
         [HttpPost]
-        [Route("AddPost")]
+        [Route("")]
         public async Task<JsonResult> AddPost([FromBody]Post model)
         {
             try
@@ -106,7 +106,7 @@ namespace BlogApi.Controllers
             };
         }
         [HttpDelete]
-        [Route("DeletePost")]
+        [Route("/{id}")]
         public async Task<JsonResult> DeletePost(int? id)
         {
             int result = 0;
@@ -140,8 +140,8 @@ namespace BlogApi.Controllers
                 };
             }
         }
-        [HttpDelete]
-        [Route("UpdatePost")]
+        [HttpPatch]
+        [Route("")]
         public async Task<JsonResult> UpdatePost([FromBody]Post model)
         {
             try
