@@ -20,7 +20,7 @@ namespace BlogApi.Models
         public DateTime Created_at { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime Updated_at { get; set; }
+        public DateTime? Updated_at { get; set; }
 
         [Required]
         public string Content { get; set; }
@@ -28,5 +28,16 @@ namespace BlogApi.Models
         [Required]
         [MaxLength(100)]
         public string Image { get; set; }
+
+        public override string ToString()
+        {
+            var str = $"Id: {Id}" +
+                $" Title:{Title}" +
+                $" Created_at: {Created_at}" +
+                $" Updated_at: {Updated_at}" +
+                $" Content: {Content}" +
+                $" Image File Name: {Image}";
+            return str;
+        }
     }
 }

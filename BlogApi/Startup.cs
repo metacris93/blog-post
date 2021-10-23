@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BlogApi.Data;
+using BlogApi.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,7 @@ namespace BlogApi
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
             services.AddDbContext<DotNetCoreMySQLContext>(options => options.UseMySQL(Configuration.GetConnectionString("Default")));
+            services.AddScoped<IPostRepository, PostRepository>();
             services.AddControllers();
         }
 
