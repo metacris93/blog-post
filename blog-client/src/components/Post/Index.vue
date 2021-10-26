@@ -25,7 +25,7 @@
 <script>
 export default {
   props: {
-    Id: {
+    id: {
       type: Number,
       default: 0,
     },

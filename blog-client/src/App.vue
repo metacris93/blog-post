@@ -32,9 +32,9 @@ export default {
   position relative
   height 100vh
 .new-post
-  position absolute
+  position fixed
   top 20%
-  left 90%
+  left 95%
 .btn-circle, .btn-xl
   width 70px
   height 70px

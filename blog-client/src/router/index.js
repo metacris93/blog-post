@@ -26,7 +26,7 @@ const routes = [
   },
   {
     path: "/remote-plus",
-    name: "RemotePLus",
+    name: "RemotePlus",
     component: () => import("../components/RemotePlus/Index.vue"),
   },
   {

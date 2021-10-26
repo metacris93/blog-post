@@ -33,11 +33,20 @@
         ></b-form-file>
         <b-button type="submit" variant="primary">Enviar</b-button>
       </b-form>
+      <!-- <h3>{{ blog }}</h3> -->
     </b-col>
   </b-row>
 </template>
 <script>
+import moment from "moment";
+import { mapState, mapActions } from "vuex";
+import blogType from "@/utils/blogType";
 export default {
+  computed: {
+    ...mapState({
+      blog: (state) => state.blog.blogType,
+    }),
+  },
   data() {
     return {
       form: {
@@ -49,8 +58,54 @@ export default {
     };
   },
   methods: {
-    onSubmit(event) {
+    ...mapActions({
+      addPost: "local/addPost",
+    }),
+    async onSubmit(event) {
       event.preventDefault();
+      try {
+        switch (this.blog) {
+          case blogType.LOCAL: {
+            let res = await this.addPost({
+              title: this.form.title,
+              content: this.form.content,
+              createdAt: moment().calendar(),
+              updatedAt: "",
+              image: this.form.imageB64,
+            });
+            if (res) {
+              this.$swal
+                .mixin({
+                  toast: true,
+                  position: "top-end",
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                    toast.addEventListener("mouseenter", this.$swal.stopTimer);
+                    toast.addEventListener(
+                      "mouseleave",
+                      this.$swal.resumeTimer
+                    );
+                  },
+                })
+                .fire({
+                  icon: "success",
+                  title: "Post registrado",
+                });
+            }
+            break;
+          }
+          case blogType.REMOTE:
+            break;
+          case blogType.REMOTE_PLUS:
+            break;
+          default:
+            break;
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     imageUploaded(e) {
       if (e.target.files.length > 0) {
