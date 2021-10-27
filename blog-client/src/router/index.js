@@ -25,6 +25,11 @@ const routes = [
     component: () => import("../components/Post/Register.vue"),
   },
   {
+    path: "/post/:id",
+    name: "ViewPost",
+    component: () => import("../views/ViewPost.vue"),
+  },
+  {
     path: "/remote-plus",
     name: "RemotePlus",
     component: () => import("../components/RemotePlus/Index.vue"),

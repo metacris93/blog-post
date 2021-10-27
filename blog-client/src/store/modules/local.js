@@ -1,19 +1,48 @@
 import { v4 as uuid } from "uuid";
 export default {
   namespaced: true,
-  state: {
-    posts: [],
+  getters: {
+    getAllPosts() {
+      if (localStorage.getItem("posts")) {
+        return JSON.parse(localStorage.getItem("posts"));
+      }
+      return [];
+    },
+    getPost(id) {
+      if (localStorage.getItem("posts")) {
+        const posts = JSON.parse(localStorage.getItem("posts"));
+        console.log("ID: " + id);
+        const post = posts.find((item) => item.id === id);
+        if (!post) {
+          throw new Error("post no encontrado");
+        }
+        return post;
+      }
+      throw new Error("post no encontrado");
+    },
   },
   mutations: {
     ADD_POST(state, post) {
-      state.posts.push(post);
+      let posts = [];
+      if (localStorage.getItem("posts")) {
+        posts = JSON.parse(localStorage.getItem("posts"));
+        posts.push(post);
+        localStorage.posts = JSON.stringify(posts);
+      } else {
+        posts.push(post);
+        localStorage.posts = JSON.stringify(posts);
+      }
     },
     DELETE_POST(state, id) {
-      const index = state.posts.findIndex((i) => i.id === id);
-      if (index === -1) {
-        throw new Error("post no encontrado: ", id);
+      if (localStorage.getItem("posts")) {
+        let posts = JSON.parse(localStorage.getItem("posts"));
+        const index = posts.findIndex((i) => i.id === id);
+        if (index === -1) {
+          throw new Error("post no encontrado: ", id);
+        }
+        posts.splice(index, 1);
+        localStorage.posts = JSON.stringify(posts);
       }
-      state.posts.splice(index, 1);
     },
   },
   actions: {

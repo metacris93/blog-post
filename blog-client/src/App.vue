@@ -23,6 +23,7 @@ export default {
 };
 </script>
 <style lang="stylus">
+@import url("https://fonts.googleapis.com/css?family=Trirong");
 #app
   font-family Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased

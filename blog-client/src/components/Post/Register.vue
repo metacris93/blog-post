@@ -69,7 +69,7 @@ export default {
             let res = await this.addPost({
               title: this.form.title,
               content: this.form.content,
-              createdAt: moment().calendar(),
+              createdAt: moment().locale("es").calendar(),
               updatedAt: "",
               image: this.form.imageB64,
             });
