@@ -66,8 +66,18 @@ export default {
   },
   computed: {
     ...mapState({
-      blog: (state) => state.blog.blogType,
+      blog: () => localStorage.blogType,
     }),
+    getPost() {
+      return {
+        id: this.id,
+        title: this.title,
+        content: this.content,
+        createdAt: this.createdAt,
+        updatedAt: this.updatedAt,
+        image: this.image,
+      };
+    },
     getID() {
       return this.id;
     },
@@ -83,9 +93,6 @@ export default {
     },
   },
   methods: {
-    // ...mapActions({
-    //   deletePost: "local/deletePost",
-    // }),
     ViewPostInfo() {
       this.$router.push("/post/" + this.id);
     },
@@ -95,37 +102,8 @@ export default {
       }
       return this.createdAt;
     },
-    // deletePostInformation() {
-    //   this.$swal
-    //     .fire({
-    //       title: "¿Estás seguro de eliminar el post?",
-    //       icon: "warning",
-    //       showCancelButton: true,
-    //       confirmButtonColor: "#3085d6",
-    //       cancelButtonColor: "#d33",
-    //       cancelButtonText: 'Cancelar',
-    //       confirmButtonText: "Estoy seguro",
-    //     })
-    //     .then(async (result) => {
-    //       if (result.isConfirmed) {
-    //         try {
-    //           const res = await this.deletePost(this.id);
-    //           if (res) {
-    //             this.$swal.fire(
-    //               "Eliminado",
-    //               "Tu post ha sido eliminado.",
-    //               "success"
-    //             );
-    //             this.$emit('reload-posts');
-    //           }
-    //         } catch (error) {
-    //           this.$swal.fire("Oops", "Tu post no fue eliminado.", "error");
-    //         }
-    //       }
-    //     });
-    // },
     updatePost() {
-      console.log("actualiza post");
+      this.$router.push("/post/" + this.id + "/edit");
     },
   },
 };

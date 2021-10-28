@@ -1,7 +1,7 @@
 <template>
   <b-row class="justify-content-md-center">
     <b-col cols="8">
-      <b-form id="formPost" @submit="onSubmit">
+      <b-form id="formPost" v-if="post" @submit="onSubmit">
         <b-form-group
           id="input-title"
           label="Título:"
@@ -10,7 +10,7 @@
         >
           <b-form-input
             id="title"
-            v-model="form.title"
+            v-model="post.title"
             placeholder="Título..."
             required
           ></b-form-input>
@@ -18,20 +18,23 @@
         <b-form-group id="input-content" label="Contenido:" label-for="content">
           <b-form-textarea
             id="content"
-            v-model="form.content"
+            v-model="post.content"
             placeholder="Contenido..."
             rows="3"
             required
           ></b-form-textarea>
         </b-form-group>
         <b-form-file
-          v-model="form.image"
+          v-model="image"
           accept="image/jpeg, image/png, image/gif"
           @change="imageUploaded"
           placeholder="Choose a file or drop it here..."
           drop-placeholder="Drop file here..."
         ></b-form-file>
-        <b-button type="submit" variant="primary">Enviar</b-button>
+        <b-form-group id="input-image" label="Imagen" label-for="post-image">
+          <img id="post-image" :src="getImage" alt="Image Post" />
+        </b-form-group>
+        <b-button class="mt-4" type="submit" variant="primary">Editar</b-button>
       </b-form>
     </b-col>
   </b-row>
@@ -45,32 +48,50 @@ export default {
     ...mapState({
       blog: () => localStorage.blogType,
     }),
+    getImage() {
+      if (this.imageB64) return this.imageB64;
+      return this.post.image ?? "";
+    },
   },
   data() {
     return {
-      form: {
-        title: "",
-        content: "",
-        image: null,
-        imageB64: "",
-      },
+      image: null,
+      imageB64: "",
+      post: {},
     };
+  },
+  mounted() {
+    try {
+      if (localStorage.getItem("posts")) {
+        const posts = JSON.parse(localStorage.getItem("posts"));
+        const id = this.$route.params.id;
+        const post = posts.find((item) => item.id === id);
+        if (!post) {
+          throw new Error("post no encontrado");
+        }
+        this.post = post;
+      }
+    } catch (error) {
+      console.error(error);
+    }
   },
   methods: {
     ...mapActions({
-      addPost: "local/addPost",
+      updatePost: "local/updatePost",
     }),
     async onSubmit(event) {
       event.preventDefault();
       try {
         switch (this.blog) {
           case blogType.LOCAL: {
-            let res = await this.addPost({
-              title: this.form.title,
-              content: this.form.content,
-              createdAt: moment().locale("es").calendar(),
-              updatedAt: "",
-              image: this.form.imageB64,
+            const image =
+              this.imageB64 === "" ? this.post.image : this.imageB64;
+            let res = await this.updatePost({
+              id: this.post.id,
+              title: this.post.title,
+              content: this.post.content,
+              updatedAt: moment().locale("es").calendar(),
+              image: image,
             });
             if (res) {
               this.$swal
@@ -90,8 +111,9 @@ export default {
                 })
                 .fire({
                   icon: "success",
-                  title: "Post registrado",
+                  title: "Post actualizado",
                 });
+              this.$router.push("/" + this.blog);
             }
             break;
           }
@@ -103,17 +125,17 @@ export default {
             break;
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     imageUploaded(e) {
       if (e.target.files.length > 0) {
-        this.form.image = e.target.files[0];
+        this.image = e.target.files[0];
         const fileReader = new FileReader();
         fileReader.onload = (e) => {
-          this.form.imageB64 = e.target.result;
+          this.imageB64 = e.target.result;
         };
-        fileReader.readAsDataURL(this.form.image);
+        fileReader.readAsDataURL(this.image);
       }
     },
   },

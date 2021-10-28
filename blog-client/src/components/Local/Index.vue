@@ -1,20 +1,25 @@
 <template>
   <b-container class="post-container">
-    <div v-for="(post, index) in getAllPosts" :key="index">
-      <Post
-        :id="post.id"
-        :title="post.title"
-        :content="post.content"
-        :createdAt="post.createdAt"
-        :updatedAt="post.updatedAt"
-        :image="post.image"
-        v-on:delete-post="deletePostInformation"
-      />
-    </div>
+    <template v-if="getAllPosts.length > 0">
+      <div v-for="(post, index) in getAllPosts" :key="index">
+        <Post
+          :id="post.id"
+          :title="post.title"
+          :content="post.content"
+          :createdAt="post.createdAt"
+          :updatedAt="post.updatedAt"
+          :image="post.image"
+          v-on:delete-post="deletePostInformation"
+        />
+      </div>
+    </template>
+    <template v-else>
+      <h1>No hay posts registrados</h1>
+    </template>
   </b-container>
 </template>
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import blogType from "@/utils/blogType";
 import Post from "@/components/Post/Index";
 export default {
@@ -28,16 +33,18 @@ export default {
     Post,
   },
   computed: {
-    ...mapGetters({
-      getPosts: "local/getAllPosts",
-    }),
     getAllPosts() {
       return this.posts;
     },
   },
+  watch: {
+    posts: function (newVal) {
+      this.posts = newVal;
+    }
+  },
   mounted() {
     this.$store.commit("blog/SET_BLOG_TYPE", blogType.LOCAL);
-    this.posts = this.getPosts;
+    this.posts = JSON.parse(localStorage.getItem("posts"));
   },
   methods: {
     ...mapMutations(["blog/SET_BLOG_TYPE"]),

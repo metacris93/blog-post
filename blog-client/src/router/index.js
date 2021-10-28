@@ -30,6 +30,11 @@ const routes = [
     component: () => import("../views/ViewPost.vue"),
   },
   {
+    path: "/post/:id/edit",
+    name: "UpdatePost",
+    component: () => import("../components/Post/Edit.vue"),
+  },
+  {
     path: "/remote-plus",
     name: "RemotePlus",
     component: () => import("../components/RemotePlus/Index.vue"),
