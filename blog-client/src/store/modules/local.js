@@ -11,7 +11,6 @@ export default {
     getPost(id) {
       if (localStorage.getItem("posts")) {
         const posts = JSON.parse(localStorage.getItem("posts"));
-        console.log("ID: " + id);
         const post = posts.find((item) => item.id === id);
         if (!post) {
           throw new Error("post no encontrado");

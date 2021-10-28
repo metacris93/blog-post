@@ -20,7 +20,9 @@
           <div class="d-flex justify-content-around">
             <b-button variant="info" @click="ViewPostInfo">Ver Post</b-button>
             <b-button variant="primary" @click="updatePost">Editar</b-button>
-            <b-button variant="danger" @click="deletePostInformation">Eliminar</b-button>
+            <b-button variant="danger" @click="$emit('delete-post', getID)"
+              >Eliminar</b-button
+            >
           </div>
         </b-card-body>
       </b-col>
@@ -28,7 +30,7 @@
   </b-card>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -66,6 +68,9 @@ export default {
     ...mapState({
       blog: (state) => state.blog.blogType,
     }),
+    getID() {
+      return this.id;
+    },
     getImage() {
       if (this.image) return this.image;
       return this.defaultImage;
@@ -78,9 +83,9 @@ export default {
     },
   },
   methods: {
-    ...mapActions({
-      deletePost: "local/deletePost",
-    }),
+    // ...mapActions({
+    //   deletePost: "local/deletePost",
+    // }),
     ViewPostInfo() {
       this.$router.push("/post/" + this.id);
     },
@@ -90,35 +95,35 @@ export default {
       }
       return this.createdAt;
     },
-    deletePostInformation() {
-      this.$swal
-        .fire({
-          title: "¿Estás seguro de eliminar el post?",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          cancelButtonText: 'Cancelar',
-          confirmButtonText: "Estoy seguro",
-        })
-        .then(async (result) => {
-          if (result.isConfirmed) {
-            try {
-              const res = await this.deletePost(this.id);
-              if (res) {
-                this.$swal.fire(
-                  "Eliminado",
-                  "Tu post ha sido eliminado.",
-                  "success"
-                );
-                this.$emit('reload-posts');
-              }
-            } catch (error) {
-              this.$swal.fire("Oops", "Tu post no fue eliminado.", "error");
-            }
-          }
-        });
-    },
+    // deletePostInformation() {
+    //   this.$swal
+    //     .fire({
+    //       title: "¿Estás seguro de eliminar el post?",
+    //       icon: "warning",
+    //       showCancelButton: true,
+    //       confirmButtonColor: "#3085d6",
+    //       cancelButtonColor: "#d33",
+    //       cancelButtonText: 'Cancelar',
+    //       confirmButtonText: "Estoy seguro",
+    //     })
+    //     .then(async (result) => {
+    //       if (result.isConfirmed) {
+    //         try {
+    //           const res = await this.deletePost(this.id);
+    //           if (res) {
+    //             this.$swal.fire(
+    //               "Eliminado",
+    //               "Tu post ha sido eliminado.",
+    //               "success"
+    //             );
+    //             this.$emit('reload-posts');
+    //           }
+    //         } catch (error) {
+    //           this.$swal.fire("Oops", "Tu post no fue eliminado.", "error");
+    //         }
+    //       }
+    //     });
+    // },
     updatePost() {
       console.log("actualiza post");
     },
