@@ -31,7 +31,6 @@ export default {
   text-align center
   color #2c3e50
   position relative
-  height 100vh
 .new-post
   position fixed
   top 20%
