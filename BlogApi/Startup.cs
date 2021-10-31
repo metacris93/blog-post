@@ -37,7 +37,8 @@ namespace BlogApi
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
-            services.AddDbContext<DotNetCoreMySQLContext>(options => options.UseMySQL(Configuration.GetConnectionString("Default")));
+            string connection = $"server={Configuration["DB:server"]};port={Configuration["DB:port"]};user={Configuration["DB:user"]};password={Configuration["DB:password"]};database={Configuration["DB:database"]}";
+            services.AddDbContext<DotNetCoreMySQLContext>(options => options.UseMySQL(connection));
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddControllers();
         }
