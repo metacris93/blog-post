@@ -22,7 +22,12 @@ const routes = [
   {
     path: "/post/create",
     name: "NewPost",
-    component: () => import("../components/Post/Register.vue"),
+    component: () => import("../components/Local/RegisterPost.vue"),
+  },
+  {
+    path: "/post/remote/create",
+    name: "NewRemotePost",
+    component: () => import("../components/RemotePlus/RegisterPost.vue"),
   },
   {
     path: "/post/:id",
@@ -30,12 +35,22 @@ const routes = [
     component: () => import("../views/ViewPost.vue"),
   },
   {
-    path: "/post/:id/edit",
-    name: "UpdatePost",
-    component: () => import("../components/Post/Edit.vue"),
+    path: "/post/remote/:id/edit",
+    name: "ViewRemotePost",
+    component: () => import("../components/RemotePlus/EditPost.vue"),
   },
   {
-    path: "/remote-plus",
+    path: "/post/:id/edit",
+    name: "UpdatePost",
+    component: () => import("../components/Local/EditPost.vue"),
+  },
+  {
+    path: "/post/remote/:id",
+    name: "UpdateRemotePost",
+    component: () => import("../components/RemotePlus/EditPost.vue"),
+  },
+  {
+    path: "/remote_plus",
     name: "RemotePlus",
     component: () => import("../components/RemotePlus/Index.vue"),
   },

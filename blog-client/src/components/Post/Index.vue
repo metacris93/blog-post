@@ -30,6 +30,7 @@
   </b-card>
 </template>
 <script>
+import moment from "moment";
 import { mapState } from "vuex";
 export default {
   data() {
@@ -94,16 +95,21 @@ export default {
   },
   methods: {
     ViewPostInfo() {
-      this.$router.push("/post/" + this.id);
+      if (this.blog === "local") this.$router.push("/post/" + this.id);
+      else if (this.blog === "remote_plus")
+        this.$router.push("/post/remote/" + this.id);
     },
     getDatePost() {
       if (this.updatedAt) {
-        return this.updatedAt;
+        return moment(this.updatedAt).locale("es").calendar();
       }
-      return this.createdAt;
+      return moment(this.createdAt).locale("es").calendar();
     },
     updatePost() {
-      this.$router.push("/post/" + this.id + "/edit");
+      if (this.blog === "local")
+        this.$router.push("/post/" + this.id + "/edit");
+      else if (this.blog === "remote_plus")
+        this.$router.push("/post/remote/" + this.id + "/edit");
     },
   },
 };

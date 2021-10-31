@@ -13,7 +13,7 @@
         <b-nav-item href="/remote" :active="isActive('Remote')"
           >Remote</b-nav-item
         >
-        <b-nav-item href="/remote-plus" :active="isActive('RemotePlus')"
+        <b-nav-item href="/remote_plus" :active="isActive('RemotePlus')"
           >Remote +</b-nav-item
         >
       </b-navbar-nav>

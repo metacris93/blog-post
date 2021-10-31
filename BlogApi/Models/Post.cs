@@ -26,7 +26,6 @@ namespace BlogApi.Models
         public string Content { get; set; }
 
         [Required]
-        [MaxLength(100)]
         public string Image { get; set; }
 
         public override string ToString()

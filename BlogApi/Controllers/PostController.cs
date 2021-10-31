@@ -47,16 +47,9 @@ namespace BlogApi.Controllers
             }
         }
         [HttpGet]
-        [Route("/{id}")]
-        public async Task<JsonResult> GetPost(int? id)
+        [Route("{id}")]
+        public async Task<JsonResult> GetPost(int id)
         {
-            if (id == null)
-            {
-                return new JsonResult(null)
-                {
-                    StatusCode = StatusCodes.Status400BadRequest
-                };
-            }
             try
             {
                 var post = await _postRepository.GetPost(id);
@@ -106,17 +99,10 @@ namespace BlogApi.Controllers
             };
         }
         [HttpDelete]
-        [Route("/{id}")]
-        public async Task<JsonResult> DeletePost(int? id)
+        [Route("{id}")]
+        public async Task<JsonResult> DeletePost(int id)
         {
             int result = 0;
-            if (id == null)
-            {
-                return new JsonResult(null)
-                {
-                    StatusCode = StatusCodes.Status400BadRequest
-                };
-            }
             try
             {
                 result = await _postRepository.DeletePost(id);

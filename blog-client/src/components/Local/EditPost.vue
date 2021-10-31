@@ -42,7 +42,6 @@
 <script>
 import moment from "moment";
 import { mapState, mapActions } from "vuex";
-import blogType from "@/utils/blogType";
 export default {
   computed: {
     ...mapState({
@@ -81,51 +80,37 @@ export default {
     }),
     async onSubmit(event) {
       event.preventDefault();
+      let res = false;
+      const image = this.imageB64 === "" ? this.post.image : this.imageB64;
       try {
-        switch (this.blog) {
-          case blogType.LOCAL: {
-            const image =
-              this.imageB64 === "" ? this.post.image : this.imageB64;
-            let res = await this.updatePost({
-              id: this.post.id,
-              title: this.post.title,
-              content: this.post.content,
-              updatedAt: moment().locale("es").calendar(),
-              image: image,
-            });
-            if (res) {
-              this.$swal
-                .mixin({
-                  toast: true,
-                  position: "top-end",
-                  showConfirmButton: false,
-                  timer: 3000,
-                  timerProgressBar: true,
-                  didOpen: (toast) => {
-                    toast.addEventListener("mouseenter", this.$swal.stopTimer);
-                    toast.addEventListener(
-                      "mouseleave",
-                      this.$swal.resumeTimer
-                    );
-                  },
-                })
-                .fire({
-                  icon: "success",
-                  title: "Post actualizado",
-                });
-              this.$router.push("/" + this.blog);
-            }
-            break;
-          }
-          case blogType.REMOTE:
-            break;
-          case blogType.REMOTE_PLUS:
-            break;
-          default:
-            break;
-        }
+        res = await this.updatePost({
+          id: this.post.id,
+          title: this.post.title,
+          content: this.post.content,
+          updatedAt: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          image: image,
+        });
       } catch (error) {
         console.error(error);
+      }
+      if (res) {
+        this.$swal
+          .mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", this.$swal.stopTimer);
+              toast.addEventListener("mouseleave", this.$swal.resumeTimer);
+            },
+          })
+          .fire({
+            icon: "success",
+            title: "Post actualizado",
+          });
+        this.$router.push("/" + this.blog);
       }
     },
     imageUploaded(e) {

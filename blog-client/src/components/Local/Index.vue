@@ -16,12 +16,14 @@
     <template v-else>
       <h1>No hay posts registrados</h1>
     </template>
+    <PostButton v-on:create-post="createPost" />
   </b-container>
 </template>
 <script>
 import { mapActions, mapMutations } from "vuex";
 import blogType from "@/utils/blogType";
 import Post from "@/components/Post/Index";
+import PostButton from "@/components/Post/PostButton";
 export default {
   name: "Local",
   data() {
@@ -31,6 +33,7 @@ export default {
   },
   components: {
     Post,
+    PostButton,
   },
   computed: {
     getAllPosts() {
@@ -40,7 +43,7 @@ export default {
   watch: {
     posts: function (newVal) {
       this.posts = newVal;
-    }
+    },
   },
   mounted() {
     this.$store.commit("blog/SET_BLOG_TYPE", blogType.LOCAL);
@@ -51,6 +54,9 @@ export default {
     ...mapActions({
       deletePost: "local/deletePost",
     }),
+    createPost() {
+      this.$router.push({ name: "NewPost" });
+    },
     deletePostInformation(id) {
       this.$swal
         .fire({

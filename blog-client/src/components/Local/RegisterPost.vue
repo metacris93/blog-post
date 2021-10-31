@@ -38,14 +38,8 @@
 </template>
 <script>
 import moment from "moment";
-import { mapState, mapActions } from "vuex";
-import blogType from "@/utils/blogType";
+import { mapActions } from "vuex";
 export default {
-  computed: {
-    ...mapState({
-      blog: () => localStorage.blogType,
-    }),
-  },
   data() {
     return {
       form: {
@@ -62,48 +56,35 @@ export default {
     }),
     async onSubmit(event) {
       event.preventDefault();
+      let res = false;
       try {
-        switch (this.blog) {
-          case blogType.LOCAL: {
-            let res = await this.addPost({
-              title: this.form.title,
-              content: this.form.content,
-              createdAt: moment().locale("es").calendar(),
-              updatedAt: "",
-              image: this.form.imageB64,
+        res = await this.addPost({
+          title: this.form.title,
+          content: this.form.content,
+          createdAt: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          updatedAt: "",
+          image: this.form.imageB64,
+        });
+        if (res) {
+          this.$swal
+            .mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener("mouseenter", this.$swal.stopTimer);
+                toast.addEventListener("mouseleave", this.$swal.resumeTimer);
+              },
+            })
+            .fire({
+              icon: "success",
+              title: "Post registrado",
             });
-            if (res) {
-              this.$swal
-                .mixin({
-                  toast: true,
-                  position: "top-end",
-                  showConfirmButton: false,
-                  timer: 3000,
-                  timerProgressBar: true,
-                  didOpen: (toast) => {
-                    toast.addEventListener("mouseenter", this.$swal.stopTimer);
-                    toast.addEventListener(
-                      "mouseleave",
-                      this.$swal.resumeTimer
-                    );
-                  },
-                })
-                .fire({
-                  icon: "success",
-                  title: "Post registrado",
-                });
-            }
-            break;
-          }
-          case blogType.REMOTE:
-            break;
-          case blogType.REMOTE_PLUS:
-            break;
-          default:
-            break;
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     imageUploaded(e) {

@@ -7,9 +7,10 @@ namespace BlogApi.Data
     public class DotNetCoreMySQLContext : DbContext
     {
         public DbSet<Post> Post { get; set; }
-        public DotNetCoreMySQLContext(DbContextOptions<DotNetCoreMySQLContext> options) : base(options)
+        public DotNetCoreMySQLContext(DbContextOptions<DotNetCoreMySQLContext> options) : base(options){}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
